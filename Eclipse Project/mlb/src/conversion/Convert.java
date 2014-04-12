@@ -232,6 +232,8 @@ public class Convert {
 		}
 		return salary;
 	}
+	
+	
 
 	public static BattingStats getBatting(PlayerSeason psi, String pid, Integer yid) {
 		BattingStats s = new BattingStats();

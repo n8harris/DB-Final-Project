@@ -1,0 +1,19 @@
+package bo;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
+@SuppressWarnings("serial")
+@Entity(name = "teamSeasonPlayer")
+public class TeamSeasonPlayer implements Serializable {
+	
+	@Column
+	Integer playerId;
+	@Column
+	Integer teamId;
+	@Column
+	Integer year;
+	
+}

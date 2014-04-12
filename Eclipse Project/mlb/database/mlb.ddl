@@ -1,3 +1,6 @@
+drop table teamSeasonPlayer;
+drop table teamseason;
+drop table team;
 drop table battingstats;
 drop table catchingstats;
 drop table fieldingstats;
@@ -87,3 +90,32 @@ create table pitchingstats (
 	primary key(playerId, year),
 	foreign key(playerId, year) references playerseason on delete cascade);	
 	
+create table team(
+	teamId		numeric(10),
+	name		varchar(30),
+	league		varchar(50),
+	yearFounded numeric(4, 0),
+	yearLast	numeric(4, 0),
+	primary key(teamId)
+);
+
+create table teamseason(
+	teamId				numeric(10),
+	year				numeric(4, 0),
+	gamesPlayed			numeric(4, 0),
+	wins				numeric(4, 0),
+	losses				numeric(4, 0),
+	team_rank			numeric(4, 0),
+	totalAttendance		numeric(10, 0),
+	foreign key(teamId) references Team(teamId),
+	primary key(teamId, year)
+);
+
+CREATE TABLE TeamSeasonPlayer (
+	playerId			numeric(10, 0),
+	teamId				numeric(10, 0),
+	year				numeric(4, 0),
+	FOREIGN KEY(teamId) REFERENCES Team(teamId),
+	FOREIGN KEY(playerId) REFERENCES Player(playerId),
+	PRIMARY KEY(playerId, teamId, year)
+);

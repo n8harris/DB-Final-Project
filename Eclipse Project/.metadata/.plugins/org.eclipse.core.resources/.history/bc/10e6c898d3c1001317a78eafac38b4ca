@@ -1,0 +1,11 @@
+package bo;
+
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+
+@SuppressWarnings("serial")
+@Entity(name="team") 
+public class Team implements Serializable{
+	
+}

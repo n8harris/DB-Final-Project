@@ -1,180 +1,121 @@
---
---
--- Tables:
--- BattingStats
--- PitchingStats
--- CatchingStats
--- Player
--- Position
--- PlayerSeason
--- Season
--- Team
--- TeamSeason
--- TeamSeasonPlayer
-
-
-CREATE TABLE Season (
-	syear VARCHAR(20) PRIMARY KEY
-);
-
-CREATE TABLE Player (
-	player_id VARCHAR(12),
-	name VARCHAR(50),
-	nickName VARCHAR(50),
-	birthDay DATE,
-	deathDay DATE,
-	battingHand VARCHAR(5),
-	throwingHand VARCHAR(5),
-	birthCity VARCHAR(50),
-	brithState VARCHAR(30),
-	college VARCHAR(50),
-	firstGame VARCHAR(20),
-	lastGame  VARCHAR(20),
-	PRIMARY KEY(player_id)
-);
-
-
-CREATE TABLE BattingStats (
-	atBats INT,
-	hits INT,
-	doubles INT,
-	triples INT,
-	homeRuns INT,
-	runsBattedIn INT,
-	strikeouts INT,
-	walks INT,
-	hitByPitch INT,
-	intentionWalks INT,
-	steals INT,
-	stealsAttempted INT,
+drop table teamSeasonPlayer;
+drop table teamseason;
+drop table team;
+drop table battingstats;
+drop table catchingstats;
+drop table fieldingstats;
+drop table pitchingstats;
+drop table playerseason;
+drop table playerposition;
+drop table player;
 	
-	player_id VARCHAR(12),
-	syear VARCHAR(20),
-	FOREIGN KEY(player_id) REFERENCES Player(player_id) ON DELETE SET NULL,
-	FOREIGN KEY(syear) REFERENCES Season(syear) ON DELETE SET NULL,
-	PRIMARY KEY (player_id, syear)
-);
-
-
-CREATE TABLE PitchingStats (
-	outsPitched INT,
-	earnedRunsAllowed INT,
-	strikeouts INT,
-	walks INT,
-	wins INT,
-	losses INT,
-	wildPitches INT,
-	battersFaced INT,
-	hitBatters INT,
-	saves INT,
+create table player (
+	playerId		numeric(10,0) 	IDENTITY(10000,5) primary key,
+	name			varchar(100)		not null,
+	nickName		varchar(255),
+	birthDay		date,
+	deathDay		date,
+	battingHand		varchar(1)		check (battingHand in ('L', 'R', 'S')),
+	throwingHand   	varchar(1)		check (throwingHand in ('L', 'R')),
+	birthCity		varchar(50),
+	birthState		varchar(2),
+	college			varchar(50),
+	firstGame		date,
+	lastGame		date,
+	CONSTRAINT uniqueConstraint_Player UNIQUE (name, birthDay, deathDay));
 	
-	player_id VARCHAR(12),
-	syear VARCHAR(20),
-	FOREIGN KEY(player_id) REFERENCES Player(player_id) ON DELETE SET NULL,
-	FOREIGN KEY(syear) REFERENCES Season(syear) ON DELETE SET NULL,
-	PRIMARY KEY (player_id, syear)
-);
-
-
-CREATE TABLE CatchingStats (
-	passedBalls INT,
-	wildPitches INT,
-	stealsAllowed INT,
-	stealsCaught INT,
+create table playerposition (
+	playerId		numeric(10,0),
+	position		varchar(10),
+	primary key(playerId, position),
+	foreign key(playerId) references player on delete cascade);
 	
-	player_id VARCHAR(12),
-	syear VARCHAR(20),
-	FOREIGN KEY(player_id) REFERENCES Player(player_id) ON DELETE SET NULL,
-	FOREIGN KEY(syear) REFERENCES Season(syear) ON DELETE SET NULL,
-	PRIMARY KEY (player_id, syear)
-);
+create table playerseason (
+	playerId		numeric(10,0)	references player on delete cascade,
+	year			numeric(4,0),
+	gamesPlayed		numeric(3,0),
+	salary			numeric(12,2),
+	primary key (playerId, year));
 
-
-CREATE TABLE FieldingStats (
-	errors INT,
-	putOuts INT,
+create table battingstats (
+	playerId		numeric(10,0),
+	year			numeric(4,0),
+	atBats			numeric(4,0),
+	hits			numeric(4,0),
+	doubles			numeric(4,0),
+	triples			numeric(4,0),
+	homeRuns		numeric(4,0),
+	runsBattedIn	numeric(4,0),
+	strikeouts		numeric(4,0),
+	walks			numeric(4,0),
+	hitByPitch		numeric(4,0),
+	intentionalWalks		numeric(4,0),
+	steals			numeric(4,0),
+	stealsAttempted	numeric(4,0),
+	primary key(playerId, year),
+	foreign key(playerId, year) references playerseason on delete cascade);
 	
-	player_id VARCHAR(12),
-	syear VARCHAR(20),
-	FOREIGN KEY(player_id) REFERENCES Player(player_id) ON DELETE SET NULL,
-	FOREIGN KEY(syear) REFERENCES Season(syear) ON DELETE SET NULL,
-	PRIMARY KEY (player_id, syear)
+create table catchingstats (
+	playerId		numeric(10,0),
+	year			numeric(4,0),
+	passedBalls		numeric(4,0),
+	wildPitches		numeric(4,0),
+	stealsAllowed	numeric(4,0),
+	stealsCaught	numeric(4,0),
+	primary key(playerId, year),
+	foreign key(playerId, year) references playerseason on delete cascade);
+
+create table fieldingstats (
+	playerId		numeric(10,0),
+	year			numeric(4,0),
+	errors			numeric(4,0),
+	putOuts			numeric(4,0),
+	primary key(playerId, year),
+	foreign key(playerId, year) references playerseason on delete cascade);
+
+create table pitchingstats (
+	playerId		numeric(10,0),
+	year			numeric(4,0),
+	outsPitched		numeric(4,0),
+	earnedRunsAllowed	numeric(4,0),
+	homeRunsAllowed		numeric(4,0),
+	strikeouts		numeric(4,0),
+	walks			numeric(4,0),
+	wins			numeric(4,0),
+	losses			numeric(4,0),
+	wildPitches		numeric(4,0),
+	battersFaced	numeric(4,0),
+	hitBatters		numeric(4,0),
+	saves			numeric(4,0),
+	primary key(playerId, year),
+	foreign key(playerId, year) references playerseason on delete cascade);	
+	
+create table team(
+	teamId		varchar(8),
+	name		varchar(30),
+	league		varchar(50),
+	yearFounded numeric(4, 0),
+	yearLast	numeric(4, 0),
+	primary key(teamId)
 );
 
-
-
-CREATE TABLE Position (
-	player_id VARCHAR(12),
-	position VARCHAR(30),
-	FOREIGN KEY(player_id) REFERENCES Player(player_id) ON DELETE SET NULL,
-	PRIMARY KEY(player_id)
+create table teamseason(
+	teamId				VARCHAR(8),
+	year				VARCHAR(20),
+	gamesPlayed			numeric(4, 0),
+	wins				numeric(4, 0),
+	losses				numeric(4, 0),
+	team_rank			numeric(4, 0),
+	totalAttendance		numeric(10, 0),
+	foreign key(teamId) references Team(teamId),
+	primary key(teamId, year)
 );
-
-
-
-
-CREATE TABLE PlayerSeason (
-	player_id VARCHAR(12),
-	syear VARCHAR(20),
-	gamesPlayed INT,
-	salary NUMERIC(12,2),
-	FOREIGN KEY(player_id) REFERENCES Player(player_id) ON DELETE SET NULL,
-	FOREIGN KEY(syear) REFERENCES Season(syear) ON DELETE SET NULL,
-	PRIMARY KEY(player_id, syear)
-);
-
-
-
-CREATE TABLE Team (
-	teamId VARCHAR(8),
-	name VARCHAR(30),
-	league VARCHAR(50),
-	syearFounded date,
-	syearLast date,
-	PRIMARY KEY(teamId)
-);
-
-
-CREATE TABLE TeamSeason (
-	teamId VARCHAR(8),
-	syear VARCHAR(20),
-	gamesPlayed INT,
-	wins INT,
-	losses INT,
-	team_rank INT,
-	totalAttendance INT,
-	FOREIGN KEY(teamId) REFERENCES Team(teamId) ON DELETE SET NULL,
-	FOREIGN KEY(syear) REFERENCES Season(syear) ON DELETE SET NULL,
-	PRIMARY KEY(teamId, syear)
-);
-
 
 CREATE TABLE TeamSeasonPlayer (
-	player_id VARCHAR(12),
-	teamId VARCHAR(8),
-	syear VARCHAR(20),
-	FOREIGN KEY(teamId) REFERENCES Team(teamId) ON DELETE SET NULL,
-	FOREIGN KEY(player_id) REFERENCES Player(player_id) ON DELETE SET NULL,
-	FOREIGN KEY(syear) REFERENCES Season(syear) ON DELETE SET NULL,
-	PRIMARY KEY(player_id, teamId, syear)
+	playerId			numeric(10, 0),
+	teamId				VARCHAR(8),
+	year				VARCHAR(20),
+	FOREIGN KEY(teamId) REFERENCES Team(teamId),
+	FOREIGN KEY(playerId) REFERENCES Player(playerId),
+	PRIMARY KEY(playerId, teamId, year)
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
