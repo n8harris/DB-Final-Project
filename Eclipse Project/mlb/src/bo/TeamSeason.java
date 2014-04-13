@@ -1,10 +1,8 @@
 package bo;
 
 import java.io.Serializable;
-import javax.persistence.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 
 @SuppressWarnings("serial")
@@ -43,6 +41,9 @@ public class TeamSeason implements Serializable{
 		this.losses = losses;
 		this.team_rank = team_rank;
 		this.totalAttendance = totalAttendance;
+	}
+
+	public TeamSeason() {
 	}
 
 	public Integer getTeamId() {
@@ -101,6 +102,22 @@ public class TeamSeason implements Serializable{
 		this.totalAttendance = totalAttendance;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof TeamSeason)){
+			return false;
+		}
+		TeamSeason other = (TeamSeason) obj;
+		return (this.getYear()==other.getYear() &&
+				this.getTeamId()==other.getTeamId());
+	}
 	
+	@Override
+	public int hashCode() {
+		Integer hash = 0;
+		if (this.getTeamId()!=null) hash += this.getTeamId().hashCode(); 
+		if (this.getYear()!=null) hash += this.getYear().hashCode();
+		return hash;
+	}
 	
 }

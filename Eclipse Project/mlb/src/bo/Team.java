@@ -29,9 +29,7 @@ public class Team implements Serializable{
 	Integer yearLast;
 	
 	
-	public Team() {
-		super();
-	}
+	public Team() {}
 	
 	public Team(Integer teamId, String name, String league,
 			Integer yearFounded, Integer yearLast) {
@@ -72,5 +70,18 @@ public class Team implements Serializable{
 	}
 	public void setYearLast(Integer yearLast) {
 		this.yearLast = yearLast;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Team)){
+			return false;
+		}
+		Team other = (Team) obj;
+		return (this.getTeamId()==other.getTeamId());
+	}
+	@Override
+	public int hashCode() {
+		return this.getTeamId().hashCode();
 	}
 }
