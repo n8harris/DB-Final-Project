@@ -15,6 +15,8 @@ import bo.FieldingStats;
 import bo.PitchingStats;
 import bo.Player;
 import bo.PlayerSeason;
+import bo.Team;
+import bo.TeamSeason;
 import dataaccesslayer.HibernateUtil;
 
 public class Convert {
@@ -377,6 +379,71 @@ public class Convert {
 			e.printStackTrace();
 		}
 		return s;
+	}
+	
+	public static void convertTeam() {
+		try {
+			PreparedStatement ps = conn.prepareStatement("select " + 
+						"teamID, " + 
+						"name, " + 
+						"lgID, " +
+						"from Teams");
+		
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				Team t = new Team();
+				String teamName = rs.getString("name").trim();
+				t.setName(teamName);
+				String teamId = rs.getString("teamId").trim();
+				String league = rs.getString("lgID").trim();
+				t.setLeague(league);
+				
+				addTeamSeasons(t, teamId);
+			
+			}
+			// For year founded, just select the first recorded year?
+			// And for yearLast, the most recent year recorded
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public static void addTeamSeasons(Team t, String tid) {
+		try {
+			PreparedStatement ps = conn.prepareStatement("select " + 
+					"teamID, " +
+					"yearID, " + 
+					"G, " + 
+					"W, " +
+					"L, " + 
+					"Rank " +
+					"attendance " +
+					"where teamID = ? " + 
+					"group by yearID, teamID;");
+			//year, gamesPlayed, wins, losses, team_rank, totalAttendance, 
+			ps.setString(1, tid);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				// For each year of this team's existence, make an entry in TeamSeason
+				Integer gamesPlayed = Integer.parseInt(rs.getString("G").trim());
+				Integer wins = Integer.parseInt(rs.getString("W").trim());
+				Integer losses = Integer.parseInt(rs.getString("L").trim());
+				Integer teamRank = Integer.parseInt(rs.getString("Rank").trim());
+				Integer attendance = Integer.parseInt(rs.getString("attendance").trim());
+				Integer yearID = Integer.parseInt(rs.getString("yearID").trim());
+				TeamSeason tS = new TeamSeason(Integer.parseInt(tid), yearID, 
+						gamesPlayed, wins, losses, teamRank, attendance);				
+			}
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
 	}
 
 }

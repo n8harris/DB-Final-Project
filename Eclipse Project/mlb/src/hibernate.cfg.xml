@@ -24,7 +24,7 @@
 <mapping class="bo.PitchingStats" />
 <mapping class="bo.Team" />
 <mapping class="bo.TeamSeason" />
-<mapping class="bo.TeamSeasonPlayer"
+<mapping class="bo.TeamSeasonPlayer"/>
 </session-factory>
 </hibernate-configuration>
 

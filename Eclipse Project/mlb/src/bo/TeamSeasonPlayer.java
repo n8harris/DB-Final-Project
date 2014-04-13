@@ -1,6 +1,7 @@
 package bo;
 
 import java.io.Serializable;
+import javax.persistence.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,11 +9,13 @@ import javax.persistence.Entity;
 @SuppressWarnings("serial")
 @Entity(name = "teamSeasonPlayer")
 public class TeamSeasonPlayer implements Serializable {
-	
+	@Id
 	@Column
 	Integer playerId;
+	@Id
 	@Column
 	Integer teamId;
+	@Id
 	@Column
 	Integer year;
 	public Integer getPlayerId() {

@@ -1,6 +1,7 @@
 package bo;
 
 import java.io.Serializable;
+import javax.persistence.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,10 +10,10 @@ import javax.persistence.Entity;
 @SuppressWarnings("serial")
 @Entity(name = "teamseason")
 public class TeamSeason implements Serializable{
-	
+	@Id
 	@Column
 	Integer teamId;
-	
+	@Id
 	@Column
 	Integer year;
 

@@ -13,7 +13,7 @@ public class Team implements Serializable{
 	
 
 	@Id
-	@OneToOne
+	//Removed one-to-one annotation
 	Integer teamId;
 	
 	@Column
