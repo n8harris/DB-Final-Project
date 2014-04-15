@@ -1,19 +1,29 @@
 package bo;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+ 
 
 @SuppressWarnings("serial")
 @Entity(name="team")
 public class Team implements Serializable{
 	
-
-	@Id
 	//Removed one-to-one annotation
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Integer teamId;
 	
 	@Column
@@ -28,24 +38,48 @@ public class Team implements Serializable{
 	@Column
 	Integer yearLast;
 	
+	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="id.team")
+	@Fetch(FetchMode.JOIN)
+	Set<TeamSeason> seasons = new HashSet<TeamSeason>();
 	
-	public Team() {}
 	
-	public Team(Integer teamId, String name, String league,
-			Integer yearFounded, Integer yearLast) {
-		super();
-		this.teamId = teamId;
-		this.name = name;
-		this.league = league;
-		this.yearFounded = yearFounded;
-		this.yearLast = yearLast;
+	//public Team() {System.out.println("created Team");}
+	
+//	public Team(Integer teamId, String name, String league,
+//			Integer yearFounded, Integer yearLast) {
+//		super();
+//		this.teamId = teamId;
+//		this.name = name;
+//		this.league = league;
+//		this.yearFounded = yearFounded;
+//		this.yearLast = yearLast;
+//	}
+	
+	public TeamSeason getTeamSeason(Integer year) {
+		for (TeamSeason ts : seasons) {
+			if (ts.getYear().equals(year)) return ts;
+		}
+		return null;
 	}
 	
-	public Integer getTeamId() {
+	public void addSeason(TeamSeason s) {
+		seasons.add(s);
+	}
+
+	public Set<TeamSeason> getSeasons() {
+		return seasons;
+	}
+	
+	public void setSeasons(Set<TeamSeason> seasons) {
+		this.seasons = seasons;
+	}
+	
+	
+	public Integer getId() {
 		return teamId;
 	}
-	public void setTeamId(Integer teamId) {
-		this.teamId = teamId;
+	public void setId(Integer id) {
+		this.teamId = id;
 	}
 	public String getName() {
 		return name;
@@ -78,10 +112,14 @@ public class Team implements Serializable{
 			return false;
 		}
 		Team other = (Team) obj;
-		return (this.getTeamId()==other.getTeamId());
+		return (this.getId()==other.getId());
 	}
 	@Override
 	public int hashCode() {
-		return this.getTeamId().hashCode();
+		return this.getName().hashCode();
+	}
+	@Override
+	public String toString(){
+		return "TeamId: " + teamId + "\nName: " + name;
 	}
 }

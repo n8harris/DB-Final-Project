@@ -29,9 +29,9 @@ public class Convert {
 			long startTime = System.currentTimeMillis();
 			conn = DriverManager.getConnection(MYSQL_CONN_URL);
 			System.out.println("Conversion started");
-			convertPlayers();
+			convertTeam();
 			System.out.println("Conversion finished");
-			long endTime = System.currentTimeMillis();
+		long endTime = System.currentTimeMillis();	
 			long elapsed = (endTime - startTime) / (1000*60);
 			System.out.println("Elapsed time in mins: " + elapsed);
 		} catch (Exception e) {
@@ -112,6 +112,7 @@ public class Convert {
 				addPositions(p, pid);
 				// players bio collected, now go after stats
 				addSeasons(p, pid);
+				System.out.println(p);
 				// we can now persist player, and the seasons and stats will cascade
 				HibernateUtil.persistPlayer(p);
 			}
@@ -386,8 +387,8 @@ public class Convert {
 			PreparedStatement ps = conn.prepareStatement("select " + 
 						"teamID, " + 
 						"name, " + 
-						"lgID, " +
-						"from Teams");
+						"lgID " +
+						"from teams");
 		
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
@@ -395,10 +396,14 @@ public class Convert {
 				String teamName = rs.getString("name").trim();
 				t.setName(teamName);
 				String teamId = rs.getString("teamId").trim();
+				if (teamName == null	|| teamName.isEmpty() || 
+						teamId == null || teamId.isEmpty()) continue;
 				String league = rs.getString("lgID").trim();
 				t.setLeague(league);
+				System.out.println("."+teamId+".");
 				
 				addTeamSeasons(t, teamId);
+				HibernateUtil.persistTeam(t);
 			
 			}
 			// For year founded, just select the first recorded year?
@@ -419,8 +424,9 @@ public class Convert {
 					"G, " + 
 					"W, " +
 					"L, " + 
-					"Rank " +
+					"Rank, " +
 					"attendance " +
+					"from teams " +
 					"where teamID = ? " + 
 					"group by yearID, teamID;");
 			//year, gamesPlayed, wins, losses, team_rank, totalAttendance, 
@@ -435,8 +441,10 @@ public class Convert {
 				Integer teamRank = Integer.parseInt(rs.getString("Rank").trim());
 				Integer attendance = Integer.parseInt(rs.getString("attendance").trim());
 				Integer yearID = Integer.parseInt(rs.getString("yearID").trim());
-				TeamSeason tS = new TeamSeason(Integer.parseInt(tid), yearID, 
-						gamesPlayed, wins, losses, teamRank, attendance);				
+				TeamSeason tS = new TeamSeason(tid, yearID, 
+						gamesPlayed, wins, losses, teamRank, attendance);
+				
+				//addTeamSeasonPlayer(tS, tid, yearID);
 			}
 			rs.close();
 			ps.close();
@@ -444,6 +452,13 @@ public class Convert {
 			e.printStackTrace();
 		}
 
+	}
+
+	@SuppressWarnings("unused")
+	private static void addTeamSeasonPlayer(TeamSeason tS, String tid,
+			Integer yearID) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

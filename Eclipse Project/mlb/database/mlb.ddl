@@ -91,7 +91,7 @@ create table pitchingstats (
 	foreign key(playerId, year) references playerseason on delete cascade);	
 	
 create table team(
-	teamId		numeric(10),
+	teamId		numeric(10) IDENTITY(10000,5),
 	name		varchar(30),
 	league		varchar(50),
 	yearFounded numeric(4, 0),
