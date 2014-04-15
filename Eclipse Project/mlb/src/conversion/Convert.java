@@ -17,6 +17,7 @@ import bo.Player;
 import bo.PlayerSeason;
 import bo.Team;
 import bo.TeamSeason;
+import bo.TeamSeasonPlayer;
 import dataaccesslayer.HibernateUtil;
 
 public class Convert {
@@ -403,7 +404,7 @@ public class Convert {
 				System.out.println("."+teamId+".");
 				
 				addTeamSeasons(t, teamId);
-				HibernateUtil.persistTeam(t);
+				//HibernateUtil.persistTeam(t);
 			
 			}
 			// For year founded, just select the first recorded year?
@@ -441,10 +442,10 @@ public class Convert {
 				Integer teamRank = Integer.parseInt(rs.getString("Rank").trim());
 				Integer attendance = Integer.parseInt(rs.getString("attendance").trim());
 				Integer yearID = Integer.parseInt(rs.getString("yearID").trim());
-				TeamSeason tS = new TeamSeason(tid, yearID, 
+				TeamSeason tS = new TeamSeason(Integer.parseInt(tid), yearID, 
 						gamesPlayed, wins, losses, teamRank, attendance);
 				
-				//addTeamSeasonPlayer(tS, tid, yearID);
+				addTeamSeasonPlayer(tS, tid, yearID);
 			}
 			rs.close();
 			ps.close();
@@ -457,7 +458,30 @@ public class Convert {
 	@SuppressWarnings("unused")
 	private static void addTeamSeasonPlayer(TeamSeason tS, String tid,
 			Integer yearID) {
-		// TODO Auto-generated method stub
+		// The Salaries table seems to be the only link between players and teams. 
+		// So that should work for populating the TeamSeasonPlayer table
+		try {
+			PreparedStatement ps = conn.prepareStatement("select " + 
+					"playerID, " +
+					"teamID, " +
+					"yearID, " + 
+					"from salaries " +
+					"where teamID = ? " + 
+					"and yearID = ? ;");
+			ps.setString(1, tid);
+			ps.setString(2, Integer.toString(yearID));
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()) {
+				Integer playerID = Integer.parseInt(rs.getString("playerID").trim());
+				TeamSeasonPlayer tsp = new TeamSeasonPlayer(playerID, Integer.parseInt(tid), yearID);
+				//HibernateUtil.persistTeamSeasonPlayer(tsp);
+			}
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 
