@@ -8,10 +8,10 @@ import javax.persistence.*;
 @Entity(name = "teamSeasonPlayer")
 public class TeamSeasonPlayer implements Serializable {
 	@Id
-	@Column
+	@JoinColumn(name = "playerId")
 	Integer playerId;
 	@Id
-	@Column
+	@JoinColumn(name = "teamId")
 	Integer teamId;
 	@Id
 	@Column

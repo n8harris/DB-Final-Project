@@ -29,6 +29,7 @@ public class Convert {
 			long startTime = System.currentTimeMillis();
 			conn = DriverManager.getConnection(MYSQL_CONN_URL);
 			System.out.println("Conversion started");
+			//convertPlayers();
 			convertTeam();
 			System.out.println("Conversion finished");
 		long endTime = System.currentTimeMillis();	
@@ -112,7 +113,6 @@ public class Convert {
 				addPositions(p, pid);
 				// players bio collected, now go after stats
 				addSeasons(p, pid);
-				System.out.println(p);
 				// we can now persist player, and the seasons and stats will cascade
 				HibernateUtil.persistPlayer(p);
 			}
@@ -400,7 +400,7 @@ public class Convert {
 						teamId == null || teamId.isEmpty()) continue;
 				String league = rs.getString("lgID").trim();
 				t.setLeague(league);
-				System.out.println("."+teamId+".");
+				//System.out.println("."+teamId+".");
 				
 				addTeamSeasons(t, teamId);
 				HibernateUtil.persistTeam(t);
@@ -441,9 +441,16 @@ public class Convert {
 				Integer teamRank = Integer.parseInt(rs.getString("Rank").trim());
 				Integer attendance = Integer.parseInt(rs.getString("attendance").trim());
 				Integer yearID = Integer.parseInt(rs.getString("yearID").trim());
-				TeamSeason tS = new TeamSeason(tid, yearID, 
-						gamesPlayed, wins, losses, teamRank, attendance);
-				
+//				TeamSeason tS = new TeamSeason(tid, yearID, 
+//						gamesPlayed, wins, losses, teamRank, attendance);
+				TeamSeason tS = new TeamSeason(t, yearID);
+				t.addSeason(tS);
+				tS.setGamesPlayed(gamesPlayed);
+				tS.setLosses(losses);
+				tS.setTeam_rank(teamRank);
+				tS.setTotalAttendance(attendance);
+				tS.setWins(wins);
+				//System.out.println(tS);
 				//addTeamSeasonPlayer(tS, tid, yearID);
 			}
 			rs.close();

@@ -1,20 +1,55 @@
 package bo;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 import javax.persistence.*;
+
+import bo.PlayerSeason.PlayerSeasonId;
 
 
 @SuppressWarnings("serial")
 @Entity(name = "teamseason")
 public class TeamSeason implements Serializable{
-	@Id
-	@Column
-	Integer teamId;
-	@Id
-	@Column
-	Integer year;
+	@EmbeddedId
+	TeamSeasonId id;
+	
+	@Embeddable
+	static class TeamSeasonId implements Serializable {
+		@ManyToOne
+		@JoinColumn(name = "teamid", referencedColumnName = "teamid", insertable = false, updatable = false)
+		Team team;
+		@Column
+		Integer year;
+		@Override
+		public boolean equals(Object obj) {
+			if(!(obj instanceof TeamSeasonId)){
+				return false;
+			}
+			TeamSeasonId other = (TeamSeasonId)obj;
+			// in order for two different object of this type to be equal,
+			// they must be for the same year and for the same team
+			return (this.team==other.team &&
+					this.year==other.year);
+		}
+		 
+		@Override
+		public int hashCode() {
+			Integer hash = 0;
+			if (this.team != null) hash += this.team.hashCode();
+			if (this.year != null) hash += this.year.hashCode();
+			return hash;
+		}
+	}
 
+	
+	/*@Id
+	@JoinColumn(name = "teamId", referencedColumnName="teamId")
+	String teamId;*/
+		
+	/*@Id
+	Integer year;
+*/
 	@Column
 	Integer gamesPlayed;
 
@@ -30,12 +65,22 @@ public class TeamSeason implements Serializable{
 	@Column
 	Integer totalAttendance;
 
-	public TeamSeason(Integer teamId, Integer year, Integer gamesPlayed,
+	public TeamSeason() {}
+	
+	public TeamSeason(Team t, Integer year){
+		TeamSeasonId tsi = new TeamSeasonId();
+		tsi.team = t;
+		tsi.year = year;
+		id = tsi;
+		//System.out.println("Creating teamSeason");
+	}
+	
+	public TeamSeason(String teamId, Integer year, Integer gamesPlayed,
 			Integer wins, Integer losses, Integer team_rank,
 			Integer totalAttendance) {
 		super();
-		this.teamId = teamId;
-		this.year = year;
+		this.id = new TeamSeasonId();
+		//this.year = year;
 		this.gamesPlayed = gamesPlayed;
 		this.wins = wins;
 		this.losses = losses;
@@ -43,23 +88,20 @@ public class TeamSeason implements Serializable{
 		this.totalAttendance = totalAttendance;
 	}
 
-	public TeamSeason() {
+	public TeamSeasonId getId() {
+		return id;
 	}
 
-	public Integer getTeamId() {
-		return teamId;
-	}
-
-	public void setTeamId(Integer teamId) {
-		this.teamId = teamId;
+	public void setId(TeamSeasonId teamId) {
+		this.id = teamId;
 	}
 
 	public Integer getYear() {
-		return year;
+		return this.id.year;
 	}
 
 	public void setYear(Integer year) {
-		this.year = year;
+		this.id.year = year;
 	}
 
 	public Integer getGamesPlayed() {
@@ -102,7 +144,36 @@ public class TeamSeason implements Serializable{
 		this.totalAttendance = totalAttendance;
 	}
 	
+	
 	@Override
+	public boolean equals(Object obj){
+		if(!(obj instanceof TeamSeason)){
+			return false;
+		}
+		TeamSeason other = (TeamSeason) obj;
+		return other.getId().equals(this.getId());
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.getId().hashCode();
+	}
+	
+	@Override
+	public String toString(){
+		return "team: " + this.id.team + "\nyear: " + this.id.year;
+	}
+	
+	public static Comparator<TeamSeason> teamSeasonsComparator = new Comparator<TeamSeason>() {
+
+		public int compare(TeamSeason ts1, TeamSeason ts2) {
+			Integer year1 = ts1.getYear();
+			Integer year2 = ts2.getYear();
+			return year1.compareTo(year2);
+		}
+
+	};
+	/*@Override
 	public boolean equals(Object obj) {
 		if(!(obj instanceof TeamSeason)){
 			return false;
@@ -111,13 +182,13 @@ public class TeamSeason implements Serializable{
 		return (this.getYear()==other.getYear() &&
 				this.getTeamId()==other.getTeamId());
 	}
-	
-	@Override
+	*/
+/*	@Override
 	public int hashCode() {
 		Integer hash = 0;
 		if (this.getTeamId()!=null) hash += this.getTeamId().hashCode(); 
 		if (this.getYear()!=null) hash += this.getYear().hashCode();
 		return hash;
-	}
+	}*/
 	
 }
