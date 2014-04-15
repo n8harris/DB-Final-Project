@@ -10,6 +10,7 @@ import org.hibernate.cfg.Configuration;
 
 import bo.Player;
 import bo.Team;
+import bo.TeamSeasonPlayer;
 
 public class HibernateUtil {
 
@@ -111,6 +112,21 @@ public class HibernateUtil {
 		}
 		return true;
 		
+	}
+	
+	public static boolean persistTeamSeasonPlayer(TeamSeasonPlayer tsp) {
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction tx = session.getTransaction();
+		try {
+			tx.begin();
+			session.save(tsp);
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 		
 }

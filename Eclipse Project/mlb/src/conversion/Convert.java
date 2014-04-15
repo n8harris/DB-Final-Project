@@ -404,7 +404,7 @@ public class Convert {
 				System.out.println("."+teamId+".");
 				
 				addTeamSeasons(t, teamId);
-				//HibernateUtil.persistTeam(t);
+				HibernateUtil.persistTeam(t);
 			
 			}
 			// For year founded, just select the first recorded year?
@@ -475,7 +475,7 @@ public class Convert {
 			while (rs.next()) {
 				Integer playerID = Integer.parseInt(rs.getString("playerID").trim());
 				TeamSeasonPlayer tsp = new TeamSeasonPlayer(playerID, Integer.parseInt(tid), yearID);
-				//HibernateUtil.persistTeamSeasonPlayer(tsp);
+				HibernateUtil.persistTeamSeasonPlayer(tsp);
 			}
 			rs.close();
 			ps.close();
