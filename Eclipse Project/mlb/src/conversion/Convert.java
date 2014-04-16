@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +25,8 @@ public class Convert {
 
 	static Connection conn;
 	static final String MYSQL_CONN_URL = "jdbc:mysql://192.168.56.1:3306/mlb?user=root&password=password"; 
-
+	static HashMap<String, Player> playerids = new HashMap<String, Player>();
+	
 	public static void main(String[] args) {
 		try {
 			long startTime = System.currentTimeMillis();
@@ -111,11 +113,15 @@ public class Convert {
 				java.util.Date lastGame = convertStringToDate(rs.getString("finalGame"));
 				if (lastGame!=null) p.setLastGame(lastGame);
 				p.setCollege(rs.getString("college"));
+							
 				addPositions(p, pid);
 				// players bio collected, now go after stats
 				addSeasons(p, pid);
 				// we can now persist player, and the seasons and stats will cascade
 				HibernateUtil.persistPlayer(p);
+				
+				// UPDATE hash map
+				playerids.put(pid, p);
 			}
 			rs.close();
 			ps.close();
@@ -454,7 +460,7 @@ public class Convert {
 				tS.setTotalAttendance(attendance);
 				tS.setWins(wins);
 				//System.out.println(tS);
-				//addTeamSeasonPlayer(t, tid, yearID, tS);
+				addTeamSeasonPlayer(t, tid, yearID, tS);
 
 			}
 			rs.close();
@@ -473,7 +479,7 @@ public class Convert {
 					"playerID, " +
 					"teamID, " +
 					"yearID " + 
-					"from salaries " +
+					"from Appearances " +
 					"where teamID = ? " + 
 					"and yearID = ? ;");
 			ps.setString(1, tid);
@@ -481,10 +487,11 @@ public class Convert {
 			ResultSet rs = ps.executeQuery();
 			
 			while (rs.next()) {
-				Integer playerID = Integer.parseInt(rs.getString("playerID").trim());
-				TeamSeasonPlayer tsp = new TeamSeasonPlayer(playerID, t, yearID);
+				Player thisPlayer = playerids.get(rs.getString("playerID"));
 				
-				tS.addSeasonPlayer(tsp);
+				TeamSeasonPlayer tsp = new TeamSeasonPlayer(thisPlayer, t, yearID);
+				
+				//tS.addSeasonPlayer(tsp);
 				//HibernateUtil.persistTeamSeasonPlayer(tsp);
 			}
 			rs.close();
