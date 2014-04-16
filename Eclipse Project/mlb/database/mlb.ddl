@@ -92,8 +92,8 @@ create table pitchingstats (
 	
 create table team(
 	teamId		numeric(10) IDENTITY(10000,5),
-	name		varchar(30),
-	league		varchar(50),
+	name		varchar(50),
+	league		varchar(2),
 	yearFounded numeric(4, 0),
 	yearLast	numeric(4, 0),
 	primary key(teamId)

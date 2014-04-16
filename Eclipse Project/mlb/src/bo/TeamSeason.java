@@ -2,8 +2,13 @@ package bo;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import bo.PlayerSeason.PlayerSeasonId;
 
@@ -41,6 +46,10 @@ public class TeamSeason implements Serializable{
 			return hash;
 		}
 	}
+	
+	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="id")
+	@Fetch(FetchMode.JOIN)
+	Set<TeamSeasonPlayer> seasonPlayer = new HashSet<TeamSeasonPlayer>();
 
 	
 	/*@Id
@@ -94,6 +103,14 @@ public class TeamSeason implements Serializable{
 
 	public void setId(TeamSeasonId teamId) {
 		this.id = teamId;
+	}
+	
+	public void addSeasonPlayer(TeamSeasonPlayer sP){
+		this.seasonPlayer.add(sP);
+	}
+	
+	public Set<TeamSeasonPlayer> getSeasonPlayer(){
+		return seasonPlayer;
 	}
 
 	public Integer getYear() {
@@ -190,5 +207,13 @@ public class TeamSeason implements Serializable{
 		if (this.getYear()!=null) hash += this.getYear().hashCode();
 		return hash;
 	}*/
+
+	public Team getTeam() {
+		return this.id.team;
+	}
+	
+	public void setTeam(Team t){
+		this.id.team = t;
+	}
 	
 }

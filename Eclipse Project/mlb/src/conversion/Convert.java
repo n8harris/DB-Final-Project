@@ -386,7 +386,7 @@ public class Convert {
 	public static void convertTeam() {
 		try {
 			PreparedStatement ps = conn.prepareStatement("select " + 
-						"teamID, " + 
+						"distinct teamID, " + 
 						"name, " + 
 						"lgID " +
 						"from teams");
@@ -400,8 +400,9 @@ public class Convert {
 				if (teamName == null	|| teamName.isEmpty() || 
 						teamId == null || teamId.isEmpty()) continue;
 				String league = rs.getString("lgID").trim();
+				//t.setId(teamId);
 				t.setLeague(league);
-				//System.out.println("."+teamId+".");
+				System.out.println("."+teamId+".");
 				
 				addTeamSeasons(t, teamId);
 				HibernateUtil.persistTeam(t);
@@ -453,7 +454,7 @@ public class Convert {
 				tS.setTotalAttendance(attendance);
 				tS.setWins(wins);
 				//System.out.println(tS);
-				//addTeamSeasonPlayer(tS, tid, yearID);
+				//addTeamSeasonPlayer(t, tid, yearID, tS);
 
 			}
 			rs.close();
@@ -464,16 +465,14 @@ public class Convert {
 
 	}
 
-	@SuppressWarnings("unused")
-	private static void addTeamSeasonPlayer(TeamSeason tS, String tid,
-			Integer yearID) {
+	private static void addTeamSeasonPlayer(Team t, String tid,	Integer yearID, TeamSeason tS) {
 		// The Salaries table seems to be the only link between players and teams. 
 		// So that should work for populating the TeamSeasonPlayer table
 		try {
 			PreparedStatement ps = conn.prepareStatement("select " + 
 					"playerID, " +
 					"teamID, " +
-					"yearID, " + 
+					"yearID " + 
 					"from salaries " +
 					"where teamID = ? " + 
 					"and yearID = ? ;");
@@ -483,8 +482,10 @@ public class Convert {
 			
 			while (rs.next()) {
 				Integer playerID = Integer.parseInt(rs.getString("playerID").trim());
-				TeamSeasonPlayer tsp = new TeamSeasonPlayer(playerID, Integer.parseInt(tid), yearID);
-				HibernateUtil.persistTeamSeasonPlayer(tsp);
+				TeamSeasonPlayer tsp = new TeamSeasonPlayer(playerID, t, yearID);
+				
+				tS.addSeasonPlayer(tsp);
+				//HibernateUtil.persistTeamSeasonPlayer(tsp);
 			}
 			rs.close();
 			ps.close();
