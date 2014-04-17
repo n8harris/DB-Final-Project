@@ -471,6 +471,7 @@ public class Convert {
 					"from teams " +
 					"where teamID = ? " + 
 					"group by yearID, teamID;");
+
 			//year, gamesPlayed, wins, losses, team_rank, totalAttendance, 
 			ps.setString(1, tid);
 			ResultSet rs = ps.executeQuery();
@@ -526,6 +527,9 @@ public class Convert {
 				// set all of these attrs the first time we see this playerseason
 				
 				Player thisPlayer = playerids.get(rs.getString("playerID").trim());
+				
+				if (thisPlayer == null || thisPlayer.getId() == null) continue;
+				
 				tsp = t.getSeasonPlayer(thisPlayer);
 				if (tsp==null) {
 					tsp = new TeamSeasonPlayer(thisPlayer, t, yearID);
