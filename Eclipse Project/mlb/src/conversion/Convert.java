@@ -424,6 +424,39 @@ public class Convert {
 		
 	}
 	
+	public static void updateYears(Team t, String tid) {
+		try {
+			PreparedStatement ps = conn.prepareStatement("select " + 
+						"yearID, " + 
+						"from Teams where " + 
+						"teamID = ? " +
+						"order by yearID desc limit 1");
+		//select yearID from Teams where teamID='HOU' order by yearID desc limit 1;
+			ResultSet rs = ps.executeQuery();
+			ps.setString(1, tid);
+			while (rs.next()) {
+				Integer year = Integer.parseInt(rs.getString("yearID").trim());
+				t.setYearFounded(year);
+			}
+			ps = conn.prepareStatement("select " + 
+					"yearID, " + 
+					"from Teams where " + 
+					"teamID = ? " +
+					"order by yearID asc limit 1");
+		//select yearID from Teams where teamID='HOU' order by yearID asc limit 1;
+			rs = ps.executeQuery();
+			ps.setString(1, tid);
+			while (rs.next()) {
+				Integer year = Integer.parseInt(rs.getString("yearID").trim());
+				t.setYearLast(year);
+			}
+			rs.close();
+			ps.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void addTeamSeasons(Team t, String tid) {
 		try {
 			PreparedStatement ps = conn.prepareStatement("select " + 
