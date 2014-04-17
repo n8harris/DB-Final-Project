@@ -47,9 +47,9 @@ public class TeamSeason implements Serializable{
 		}
 	}
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="id")
-	@Fetch(FetchMode.JOIN)
-	Set<TeamSeasonPlayer> seasonPlayer = new HashSet<TeamSeasonPlayer>();
+//	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="id")
+//	@Fetch(FetchMode.JOIN)
+//	Set<TeamSeasonPlayer> seasonPlayer = new HashSet<TeamSeasonPlayer>();
 
 	
 	/*@Id
@@ -105,13 +105,13 @@ public class TeamSeason implements Serializable{
 		this.id = teamId;
 	}
 	
-	public void addSeasonPlayer(TeamSeasonPlayer sP){
-		this.seasonPlayer.add(sP);
-	}
-	
-	public Set<TeamSeasonPlayer> getSeasonPlayer(){
-		return seasonPlayer;
-	}
+//	public void addSeasonPlayer(TeamSeasonPlayer sP){
+//		this.seasonPlayer.add(sP);
+//	}
+//	
+//	public Set<TeamSeasonPlayer> getSeasonPlayer(){
+//		return seasonPlayer;
+//	}
 
 	public Integer getYear() {
 		return this.id.year;

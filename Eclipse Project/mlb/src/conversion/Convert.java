@@ -32,7 +32,7 @@ public class Convert {
 			long startTime = System.currentTimeMillis();
 			conn = DriverManager.getConnection(MYSQL_CONN_URL);
 			System.out.println("Conversion started");
-			//convertPlayers();
+			convertPlayers();
 			convertTeam();
 			System.out.println("Conversion finished");
 		long endTime = System.currentTimeMillis();	
@@ -116,7 +116,7 @@ public class Convert {
 							
 				addPositions(p, pid);
 				// players bio collected, now go after stats
-				addSeasons(p, pid);
+				//addSeasons(p, pid);
 				// we can now persist player, and the seasons and stats will cascade
 				HibernateUtil.persistPlayer(p);
 				
@@ -408,7 +408,6 @@ public class Convert {
 				String league = rs.getString("lgID").trim();
 				//t.setId(teamId);
 				t.setLeague(league);
-				System.out.println("."+teamId+".");
 				
 				addTeamSeasons(t, teamId);
 				HibernateUtil.persistTeam(t);
@@ -520,11 +519,18 @@ public class Convert {
 			ResultSet rs = ps.executeQuery();
 			
 			while (rs.next()) {
-				Player thisPlayer = playerids.get(rs.getString("playerID"));
+				TeamSeasonPlayer tsp = null;
+				// it is possible to see more than one of these per player if he switched teams
+				// set all of these attrs the first time we see this playerseason
 				
-				TeamSeasonPlayer tsp = new TeamSeasonPlayer(thisPlayer, t, yearID);
+				Player thisPlayer = playerids.get(rs.getString("playerID").trim());
+				tsp = t.getSeasonPlayer(thisPlayer);
+				if (tsp==null) {
+					tsp = new TeamSeasonPlayer(thisPlayer, t, yearID);
+					t.addSeasonPlayer(tsp);
+				}
 				
-				//tS.addSeasonPlayer(tsp);
+				
 				//HibernateUtil.persistTeamSeasonPlayer(tsp);
 			}
 			rs.close();

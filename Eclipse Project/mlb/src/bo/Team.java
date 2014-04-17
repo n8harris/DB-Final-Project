@@ -42,7 +42,7 @@ public class Team implements Serializable{
 	@Fetch(FetchMode.JOIN)
 	Set<TeamSeason> seasons = new HashSet<TeamSeason>();
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="year")
+	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="id.player")
 	@Fetch(FetchMode.JOIN)
 	Set<TeamSeasonPlayer> seasonPlayer = new HashSet<TeamSeasonPlayer>();
 	
@@ -59,12 +59,7 @@ public class Team implements Serializable{
 //		this.yearLast = yearLast;
 //	}
 	
-	public TeamSeason getTeamSeason(Integer year) {
-		for (TeamSeason ts : seasons) {
-			if (ts.getYear().equals(year)) return ts;
-		}
-		return null;
-	}
+	
 	
 	public void addSeason(TeamSeason s) {
 		seasons.add(s);
@@ -80,6 +75,18 @@ public class Team implements Serializable{
 	
 	public void addSeasonPlayer(TeamSeasonPlayer sP){
 		this.seasonPlayer.add(sP);
+	}
+	
+	public TeamSeasonPlayer getSeasonPlayer(Player p) {
+		if(p!=null){
+			for (TeamSeasonPlayer ts : seasonPlayer) {
+				if (ts.getPlayer().equals(p)) return ts;
+			}
+			return null;
+		}else
+			System.out.println("poop");
+		return null;
+		
 	}
 	
 	public Set<TeamSeasonPlayer> getSeasonPlayer(){
