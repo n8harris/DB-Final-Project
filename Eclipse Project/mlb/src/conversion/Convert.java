@@ -408,7 +408,7 @@ public class Convert {
 				String league = rs.getString("lgID").trim();
 				//t.setId(teamId);
 				t.setLeague(league);
-				
+				updateYears(t, teamId);
 				addTeamSeasons(t, teamId);
 				HibernateUtil.persistTeam(t);
 			
@@ -426,28 +426,30 @@ public class Convert {
 	public static void updateYears(Team t, String tid) {
 		try {
 			PreparedStatement ps = conn.prepareStatement("select " + 
-						"yearID, " + 
+						"yearID " + 
 						"from Teams where " + 
 						"teamID = ? " +
 						"order by yearID desc limit 1");
 		//select yearID from Teams where teamID='HOU' order by yearID desc limit 1;
-			ResultSet rs = ps.executeQuery();
 			ps.setString(1, tid);
+			ResultSet rs = ps.executeQuery();
+			
 			while (rs.next()) {
 				Integer year = Integer.parseInt(rs.getString("yearID").trim());
-				t.setYearFounded(year);
+				t.setYearLast(year);
 			}
 			ps = conn.prepareStatement("select " + 
-					"yearID, " + 
+					"yearID " + 
 					"from Teams where " + 
 					"teamID = ? " +
 					"order by yearID asc limit 1");
 		//select yearID from Teams where teamID='HOU' order by yearID asc limit 1;
-			rs = ps.executeQuery();
 			ps.setString(1, tid);
+			rs = ps.executeQuery();
+			
 			while (rs.next()) {
 				Integer year = Integer.parseInt(rs.getString("yearID").trim());
-				t.setYearLast(year);
+				t.setYearFounded(year);
 			}
 			rs.close();
 			ps.close();
