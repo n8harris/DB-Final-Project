@@ -116,7 +116,7 @@ public class Convert {
 							
 				addPositions(p, pid);
 				// players bio collected, now go after stats
-				//addSeasons(p, pid);
+				addSeasons(p, pid);
 				// we can now persist player, and the seasons and stats will cascade
 				HibernateUtil.persistPlayer(p);
 				

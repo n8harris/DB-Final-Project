@@ -18,7 +18,7 @@ public class ControllerFactory {
         if (name.equalsIgnoreCase(SSP_PLAYER)) {
             bsa = new PlayerController();
         } else if (name.equalsIgnoreCase(SSP_TEAM)) {
-            //bsa = new TeamController();
+            bsa = new TeamController();
         }
         return bsa;
     }

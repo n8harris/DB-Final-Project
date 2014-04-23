@@ -128,5 +128,10 @@ public class HibernateUtil {
 		}
 		return true;
 	}
+
+	public static Team retrieveTeamById(Integer valueOf) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 		
 }
