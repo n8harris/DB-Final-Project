@@ -8,4 +8,5 @@
 <fullyQualifiedTypeName name="dataaccesslayer.HibernateUtil"/>
 <fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="bo.Team"/>
+<fullyQualifiedTypeName name="org.hibernate.Query"/>
 </qualifiedTypeNameHistroy>
