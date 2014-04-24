@@ -107,24 +107,24 @@ public class HibernateUtil {
 		return list;	
 	}
 	
-	public static Player retrieveTeamById(Integer id) {
-        Player p=null;
+	public static Team retrieveTeamById(Integer id) {
+        Team t = null;
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = session.getTransaction();
 		try {
 			tx.begin();
 			org.hibernate.Query query;
-			query = session.createQuery("from bo.Player where id = :id ");
+			query = session.createQuery("from bo.Team where id = :id ");
 		    query.setParameter("id", id);
 		    if (query.list().size()>0) {
-		    	p = (Player) query.list().get(0);
+		    	t = (Team) query.list().get(0);
 		    }
 			tx.commit();
 		} catch (Exception e) {
 			tx.rollback();
 			e.printStackTrace();
 		}
-		return p;
+		return t;
 	}
 	
 	
