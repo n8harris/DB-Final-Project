@@ -54,13 +54,13 @@ public class TeamController extends BaseController {
 			System.out.println("id is null in processDetails");
             return;
         }
-		Team t = (Team) HibernateUtil.retrieveTeamById(Integer.valueOf(id));//TODO
-        if (t == null) {
+		//Team t = (Team) HibernateUtil.retrieveTeamById(Integer.valueOf(id));//TODO
+        //if (t == null) {
 			System.out.println("Player not found in processDetails by id: " + id);
 			return;
-		}
-        buildSearchResultsTableTeamDetail(t);
-        view.buildLinkToSearch();
+		//}
+        //buildSearchResultsTableTeamDetail(t);
+        //view.buildLinkToSearch();
 	}
 
 	private void buildSearchResultsTableTeamDetail(Team t) {
