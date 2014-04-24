@@ -6,6 +6,7 @@ import view.TeamView;
 import bo.Player;
 import bo.PlayerCareerStats;
 import bo.Team;
+import bo.TeamSeason;
 import dataaccesslayer.HibernateUtil;
 
 public class TeamController extends BaseController {
@@ -63,8 +64,42 @@ public class TeamController extends BaseController {
         //view.buildLinkToSearch();
 	}
 
-	private void buildSearchResultsTableTeamDetail(Team t) {
-		// TODO Auto-generated method stub			
+	private void buildSearchResultsTableTeamDetail(Team t, List<TeamSeason> info) {
+		// TODO Auto-generated method stub
+		String[][] table = new String[2][5];
+        table[0][0] = "Name";
+        table[0][1] = "League";
+        table[0][2] = "Year Founded";
+        table[0][3] = "Most Recent Year";
+        table[1][0] = t.getName();
+        table[1][1] = t.getLeague();
+        table[1][2] = Integer.toString(t.getYearFounded());
+        table[1][3] = Integer.toString(t.getYearLast());
+        view.buildTable(table);
+        
+        String[][] teamSeasons = new String[info.size() + 1][7];
+        teamSeasons[0][0] = "Year";
+        teamSeasons[0][1] = "Games Played";
+        teamSeasons[0][2] = "Roster";
+        teamSeasons[0][3] = "Wins";
+        teamSeasons[0][4] = "Losses";
+        teamSeasons[0][5] = "Rank";
+        teamSeasons[0][6] = "Attendance";
+        
+        String tid = Integer.toString(t.getId());
+        
+        for (int i = 0; i < info.size(); i++) {
+            TeamSeason ts = info.get(i);
+            table[i + 1][0] = Integer.toString(ts.getYear());
+            table[i + 1][1] = Integer.toString(ts.getGamesPlayed());            
+            table[i + 1][2] = view.encodeLink(new String[]{"id"}, new String[]{tid}, "Roster", ACT_ROSTER, SSP_TEAM);
+            table[i + 1][3] = Integer.toString(ts.getWins());
+            table[i + 1][4] = Integer.toString(ts.getLosses());
+            table[i + 1][5] = Integer.toString(ts.getTeam_rank());
+            table[i + 1][6] = Integer.toString(ts.getTotalAttendance());
+            
+        }
+        view.buildTable(teamSeasons);
 	}
 	
 	private void buildSearchResultsTableTeam(List<Team> bos) {
