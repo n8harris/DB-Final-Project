@@ -4,4 +4,8 @@
 <fullyQualifiedTypeName name="javax.persistence.OneToOne"/>
 <fullyQualifiedTypeName name="java.io.Serializable"/>
 <fullyQualifiedTypeName name="javax.persistence.Column"/>
+<fullyQualifiedTypeName name="view.TeamView"/>
+<fullyQualifiedTypeName name="dataaccesslayer.HibernateUtil"/>
+<fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="bo.Team"/>
 </qualifiedTypeNameHistroy>

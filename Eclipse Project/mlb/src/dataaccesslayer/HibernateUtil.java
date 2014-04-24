@@ -60,6 +60,7 @@ public class HibernateUtil {
 	}
 	
 	
+	
 	@SuppressWarnings("unchecked")
 	public static List<Player> retrievePlayersByName(String nameQuery, Boolean exactMatch) {
         List<Player> list=null;
@@ -82,6 +83,50 @@ public class HibernateUtil {
 		}
 		return list;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static List<Team> retrieveTeamsByName(String nameQuery, Boolean exactMatch){
+		List<Team> list = null;
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction tx = session.getTransaction();
+		try{
+			tx.begin();
+			org.hibernate.Query query;
+			if(exactMatch){
+				query = session.createQuery("from bo.Team where name = :name");
+			} else {
+				query = session.createQuery("from bo.Team where name like '%' + :name + '%' ");
+			}
+			query.setParameter("name", nameQuery);
+			list = query.list();
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+		}
+		return list;	
+	}
+	
+	public static Player retrieveTeamById(Integer id) {
+        Player p=null;
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction tx = session.getTransaction();
+		try {
+			tx.begin();
+			org.hibernate.Query query;
+			query = session.createQuery("from bo.Player where id = :id ");
+		    query.setParameter("id", id);
+		    if (query.list().size()>0) {
+		    	p = (Player) query.list().get(0);
+		    }
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+		}
+		return p;
+	}
+	
 	
 	public static boolean persistPlayer(Player p) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -127,11 +172,5 @@ public class HibernateUtil {
 			return false;
 		}
 		return true;
-	}
-
-	public static Team retrieveTeamById(Integer valueOf) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-		
+	}		
 }

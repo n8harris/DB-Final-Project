@@ -1,7 +1,0 @@
-package bo;
-
-import java.io.Serializable;
-
-public class TeamSeasonPlayer extends Serializable {
-
-}
