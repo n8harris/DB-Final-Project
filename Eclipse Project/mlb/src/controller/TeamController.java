@@ -5,8 +5,10 @@ import java.util.List;
 import view.TeamView;
 import bo.Player;
 import bo.PlayerCareerStats;
+import bo.PlayerSeason;
 import bo.Team;
 import bo.TeamSeason;
+import bo.TeamSeasonPlayer;
 import dataaccesslayer.HibernateUtil;
 
 public class TeamController extends BaseController {
@@ -90,9 +92,11 @@ public class TeamController extends BaseController {
         
         for (int i = 0; i < info.size(); i++) {
             TeamSeason ts = info.get(i);
+            String year = Integer.toString(ts.getYear());
             table[i + 1][0] = Integer.toString(ts.getYear());
-            table[i + 1][1] = Integer.toString(ts.getGamesPlayed());            
-            table[i + 1][2] = view.encodeLink(new String[]{"id"}, new String[]{tid}, "Roster", ACT_ROSTER, SSP_TEAM);
+            table[i + 1][1] = Integer.toString(ts.getGamesPlayed());
+            // Ex: localhost/team.ssp?id=10365&yid=1976&action=roster
+            table[i + 1][2] = view.encodeLink(new String[]{"tid", "yid"}, new String[]{tid, year}, "Roster", ACT_ROSTER, SSP_TEAM);
             table[i + 1][3] = Integer.toString(ts.getWins());
             table[i + 1][4] = Integer.toString(ts.getLosses());
             table[i + 1][5] = Integer.toString(ts.getTeam_rank());
@@ -123,4 +127,35 @@ public class TeamController extends BaseController {
         }
         view.buildTable(table);
     }
+	
+	private void buildSearchResultsRoster(Team t, int year, List<Player> lop) {
+			
+		String[][] table = new String[2][4];
+        table[0][0] = "Name";
+        table[0][1] = "League";
+        table[0][2] = "Year";
+        table[0][3] = "Player Payroll";
+        table[1][0] = t.getName();
+        table[1][1] = t.getLeague();
+        table[1][2] = Integer.toString(year);
+        table[1][3] = "$0.00"; // This needs fixed. Is this an aggregate we have to calculate?
+        view.buildTable(table);
+        
+        String[][] players = new String[lop.size() + 1][3];
+        players[0][0] = "Name";
+        players[0][1] = "Games Played";
+        players[0][2] = "Salary";
+        
+        for (int i = 0; i < lop.size(); i++) {
+        	Player p = lop.get(i);
+        	String name = p.getName();
+        	String pid = p.getId().toString();
+        	players[i + 1][0] = view.encodeLink(new String[]{"id"}, new String[]{pid}, name, ACT_DETAIL, SSP_PLAYER);
+        	PlayerSeason ps = p.getPlayerSeason(year); 
+        	players[i + 1][1] = ps.getGamesPlayed().toString();
+        	players[i + 1][2] = DOLLAR_FORMAT.format(ps.getSalary());
+        }
+        
+        view.buildTable(players);
+	}
 }
