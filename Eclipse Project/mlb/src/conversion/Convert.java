@@ -24,7 +24,7 @@ import dataaccesslayer.HibernateUtil;
 public class Convert {
 
 	static Connection conn;
-	static final String MYSQL_CONN_URL = "jdbc:mysql://192.168.56.1:3306/mlb?user=root&password=admin"; 
+	static final String MYSQL_CONN_URL = "jdbc:mysql://192.168.56.1:3306/mlb?user=root&password=password"; 
 	static HashMap<String, Player> playerids = new HashMap<String, Player>();
 	
 	public static void main(String[] args) {
