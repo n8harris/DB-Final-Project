@@ -30,9 +30,7 @@ public class TeamController extends BaseController {
             processSearch();
         } else if (action.equalsIgnoreCase(ACT_DETAIL)) {
             processDetails();
-        } else if (action.equalsIgnoreCase(ACT_ROSTER)) {
-            processRoster();
-        }  
+        } 
 	}
 
 	private void processSearchForm() {
@@ -47,9 +45,9 @@ public class TeamController extends BaseController {
         }
         String v = keyVals.get("exact");
         boolean exact = (v != null && v.equalsIgnoreCase("on"));
-        List<Team> bos = HibernateUtil.retrieveTeamsByName(name, exact);
+        // List<Team> bos = HibernateUtil.retrieveTeamByName(name, exact);
         view.printSearchResultsMessage(name, exact);
-        buildSearchResultsTableTeam(bos);
+        //buildSearchResultsTableTeam(bos);
         view.buildLinkToSearch();
 	}
 
@@ -59,11 +57,11 @@ public class TeamController extends BaseController {
 			System.out.println("id is null in processDetails");
             return;
         }
-		Team t = (Team) HibernateUtil.retrieveTeamById(Integer.valueOf(id));//TODO
-		List<TeamSeason> seasons = (List<TeamSeason>) HibernateUtil.retrieveTeamSeasonsById(t);
-        if (t == null) {
+		//Team t = (Team) HibernateUtil.retrieveTeamById(Integer.valueOf(id));//TODO
+        //if (t == null) {
 			System.out.println("Player not found in processDetails by id: " + id);
 			return;
+
 		}
         buildSearchResultsTableTeamDetail(t, seasons);
         view.buildLinkToSearch();
@@ -76,6 +74,7 @@ public class TeamController extends BaseController {
 		List<TeamSeasonPlayer> lop = HibernateUtil.retrieveRoster(t, yid);
 		buildSearchResultsRoster(lop);
 		view.buildLinkToSearch();
+
 	}
 
 	private void buildSearchResultsTableTeamDetail(Team t, List<TeamSeason> info) {
@@ -105,14 +104,14 @@ public class TeamController extends BaseController {
         for (int i = 0; i < info.size(); i++) {
             TeamSeason ts = info.get(i);
             String year = Integer.toString(ts.getYear());
-            teamSeasons[i + 1][0] = Integer.toString(ts.getYear());
-            teamSeasons[i + 1][1] = Integer.toString(ts.getGamesPlayed());
+            table[i + 1][0] = Integer.toString(ts.getYear());
+            table[i + 1][1] = Integer.toString(ts.getGamesPlayed());
             // Ex: localhost/team.ssp?id=10365&yid=1976&action=roster
-            teamSeasons[i + 1][2] = view.encodeLink(new String[]{"tid", "yid"}, new String[]{tid, year}, "Roster", ACT_ROSTER, SSP_TEAM);
-            teamSeasons[i + 1][3] = Integer.toString(ts.getWins());
-            teamSeasons[i + 1][4] = Integer.toString(ts.getLosses());
-            teamSeasons[i + 1][5] = Integer.toString(ts.getTeam_rank());
-            teamSeasons[i + 1][6] = Integer.toString(ts.getTotalAttendance());
+            table[i + 1][2] = view.encodeLink(new String[]{"tid", "yid"}, new String[]{tid, year}, "Roster", ACT_ROSTER, SSP_TEAM);
+            table[i + 1][3] = Integer.toString(ts.getWins());
+            table[i + 1][4] = Integer.toString(ts.getLosses());
+            table[i + 1][5] = Integer.toString(ts.getTeam_rank());
+            table[i + 1][6] = Integer.toString(ts.getTotalAttendance());
             
         }
         view.buildTable(teamSeasons);

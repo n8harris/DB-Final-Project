@@ -10,7 +10,6 @@ import org.hibernate.cfg.Configuration;
 
 import bo.Player;
 import bo.Team;
-import bo.TeamSeason;
 import bo.TeamSeasonPlayer;
 
 public class HibernateUtil {
@@ -128,6 +127,7 @@ public class HibernateUtil {
 		return t;
 	}
 	
+
 	@SuppressWarnings("unchecked")
 	public static List<TeamSeason> retrieveTeamSeasonsById(Team t) {
 		List<TeamSeason> list = null;
@@ -187,6 +187,8 @@ public class HibernateUtil {
 		return list;
 	}
 	
+
+
 	
 	public static boolean persistPlayer(Player p) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
