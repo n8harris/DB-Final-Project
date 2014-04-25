@@ -23,7 +23,7 @@ public abstract class BaseView {
         sb.append("<meta charset='utf-8'>\r\n");
         sb.append("<title>Baseball Database</title>\r\n");
         sb.append("<meta name='viewport' content='width=device-width, initial-scale=1, maximum-scale=1' />\r\n");
-        sb.append("<link rel='stylesheet' href='style.css'>\r\n");
+        sb.append("<link rel='stylesheet' href='/css/style.css'>\r\n");
         sb.append("<link href='http://fonts.googleapis.com/css?family=Oswald|Open+Sans:400,600,700' rel='stylesheet' type='text/css'>\r\n");
         sb.append("</head>\r\n");
         sb.append("<body class='home page page-id-272 page-template page-template-index-php'>\r\n");
