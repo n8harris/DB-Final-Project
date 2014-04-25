@@ -26,6 +26,10 @@ public class HibernateUtil {
 				.addAnnotatedClass(bo.CatchingStats.class)
 				.addAnnotatedClass(bo.FieldingStats.class)
 				.addAnnotatedClass(bo.PitchingStats.class)
+				
+				.addAnnotatedClass(bo.Team.class)
+				.addAnnotatedClass(bo.TeamSeason.class)
+				.addAnnotatedClass(bo.TeamSeasonPlayer.class)
 				.configure();
 			StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().
 			applySettings(cfg.getProperties());
@@ -149,16 +153,17 @@ public class HibernateUtil {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static List<TeamSeasonPlayer> retrieveRoster(Team t, String yid) {
+	public static List<TeamSeasonPlayer> retrieveRoster(String tid, String yid) {
 		List<TeamSeasonPlayer> list = null;
 		Integer year = Integer.valueOf(yid);
+		Integer teamId = Integer.valueOf(tid);
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = session.getTransaction();
 		try {
 			tx.begin();
 			org.hibernate.Query query;
-			query = session.createQuery("from bo.TeamSeasonPlayer where id.team = :team and year = :yid");
-		    query.setParameter("team", t);
+			query = session.createQuery("from bo.TeamSeasonPlayer where id.team.id = :team and year = :yid");
+		    query.setParameter("team", teamId);
 		    query.setParameter("yid", year);
 		    list = query.list();
 			tx.commit();

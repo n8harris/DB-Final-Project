@@ -72,8 +72,8 @@ public class TeamController extends BaseController {
 	private void processRoster() {
 		String tid = keyVals.get("tid");
 		String yid = keyVals.get("yid");
-		Team t = (Team) HibernateUtil.retrieveTeamById(Integer.valueOf(tid));//TODO
-		List<TeamSeasonPlayer> lop = HibernateUtil.retrieveRoster(t, yid);
+		//Team t = (Team) HibernateUtil.retrieveTeamById(Integer.valueOf(tid));//TODO
+		List<TeamSeasonPlayer> lop = HibernateUtil.retrieveRoster(tid, yid);
 		buildSearchResultsRoster(lop);
 		view.buildLinkToSearch();
 
@@ -81,7 +81,7 @@ public class TeamController extends BaseController {
 
 	private void buildSearchResultsTableTeamDetail(Team t, List<TeamSeason> info) {
 		// TODO Auto-generated method stub
-		String[][] table = new String[2][5];
+		String[][] table = new String[2][4];
         table[0][0] = "Name";
         table[0][1] = "League";
         table[0][2] = "Year Founded";
