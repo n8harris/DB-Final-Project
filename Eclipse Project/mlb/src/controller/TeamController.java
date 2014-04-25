@@ -60,7 +60,7 @@ public class TeamController extends BaseController {
             return;
         }
 		Team t = (Team) HibernateUtil.retrieveTeamById(Integer.valueOf(id));//TODO
-		List<TeamSeason> seasons = (List<TeamSeason>) HibernateUtil.retrieveTeamSeasonsById(t);
+		List<TeamSeason> seasons = HibernateUtil.retrieveTeamSeasonsById(t);
         if (t == null) {
 			System.out.println("Player not found in processDetails by id: " + id);
 			return;
@@ -76,6 +76,7 @@ public class TeamController extends BaseController {
 		List<TeamSeasonPlayer> lop = HibernateUtil.retrieveRoster(t, yid);
 		buildSearchResultsRoster(lop);
 		view.buildLinkToSearch();
+
 	}
 
 	private void buildSearchResultsTableTeamDetail(Team t, List<TeamSeason> info) {
@@ -165,8 +166,10 @@ public class TeamController extends BaseController {
         	String pid = p.getId().toString();
         	players[i + 1][0] = view.encodeLink(new String[]{"id"}, new String[]{pid}, name, ACT_DETAIL, SSP_PLAYER);
         	PlayerSeason ps = p.getPlayerSeason(year); 
-        	players[i + 1][1] = ps.getGamesPlayed().toString();
-        	players[i + 1][2] = DOLLAR_FORMAT.format(ps.getSalary());
+        	if(ps != null) {
+        		players[i + 1][1] = ps.getGamesPlayed().toString();
+        		players[i + 1][2] = DOLLAR_FORMAT.format(ps.getSalary());
+        	}
         }
         
         view.buildTable(players);
