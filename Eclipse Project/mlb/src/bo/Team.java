@@ -38,12 +38,12 @@ public class Team implements Serializable{
 	@Column
 	Integer yearLast;
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="id.team")
-	@Fetch(FetchMode.JOIN)
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="id.team")
+	@Fetch(FetchMode.SELECT)
 	Set<TeamSeason> seasons = new HashSet<TeamSeason>();
 	
-	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="id.player")
-	@Fetch(FetchMode.JOIN)
+	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="id.player")
+	@Fetch(FetchMode.SELECT)
 	Set<TeamSeasonPlayer> seasonPlayer = new HashSet<TeamSeasonPlayer>();
 	
 	

@@ -32,7 +32,7 @@ public class Player {
 	Set<String> positions = new HashSet<String>();
 	
 	@OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, mappedBy="id.player")
-	@Fetch(FetchMode.JOIN)
+	@Fetch(FetchMode.SELECT)
 	Set<PlayerSeason> seasons = new HashSet<PlayerSeason>();
 	
 	@Column
