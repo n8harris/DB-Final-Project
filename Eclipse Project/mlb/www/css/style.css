@@ -634,7 +634,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   text-align: center;
 }
 
-#one-column-emphasis
+.one-column-emphasis
 {
 	font-family: "Open Sans", "Lucida Grande", Sans-Serif;
 	font-size: 14px;
@@ -643,14 +643,14 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 	text-align: left;
 	border-collapse: collapse;
 }
-#one-column-emphasis th
+.one-column-emphasis th
 {
 	font-size: 14px;
 	font-weight: normal;
 	padding: 12px 15px;
 	color: #282828;
 }
-#one-column-emphasis td
+.one-column-emphasis td
 {
 	padding: 10px 15px;
 	color: #474747;
@@ -662,7 +662,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 	border-right: 10px solid transparent;
 	border-left: 10px solid transparent;
 }
-#one-column-emphasis tr:hover td
+.one-column-emphasis tr:hover td
 {
 	color: #fff;
 	background: #1FB4DD;
