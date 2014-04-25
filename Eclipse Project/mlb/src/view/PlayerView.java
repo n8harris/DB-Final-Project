@@ -22,8 +22,7 @@ public class PlayerView extends BaseView {
         body.append("<div class='row'>\r\n");
         body.append("<div class='five columns alpha'>\r\n");
         body.append("<div>\r\n");
-	    body.append("<label for='player'>Player Name</label>\r\n");
-	    body.append("<input type='text' name='name' />\r\n");
+	    body.append("<input type='text' name='name' placeholder='Player Name'/>\r\n");
 	    body.append("</div>\r\n");
 		body.append("</div>\r\n");
 		body.append("<div class='five columns alpha'>\r\n");
