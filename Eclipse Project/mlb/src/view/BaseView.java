@@ -63,7 +63,7 @@ public abstract class BaseView {
     
     public final void buildLinkToSearch() {
         body.append("<br/><br/>\r\n");
-        body.append("<a href=\"");
+        body.append("<a class='btn' href=\"");
         body.append(title.toLowerCase());
         body.append(".ssp?action=searchform\">Search for a ");
         body.append(title);
