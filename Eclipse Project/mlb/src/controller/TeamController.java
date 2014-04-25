@@ -73,8 +73,8 @@ public class TeamController extends BaseController {
 		String tid = keyVals.get("tid");
 		String yid = keyVals.get("yid");
 		Team t = (Team) HibernateUtil.retrieveTeamById(Integer.valueOf(tid));//TODO
-		List<Player> lop = HibernateUtil.retrieveRoster(t, yid);
-		//buildSearchResultsRoster(Team t, int year, List<Player> lop);
+		List<TeamSeasonPlayer> lop = HibernateUtil.retrieveRoster(t, yid);
+		buildSearchResultsRoster(lop);
 		view.buildLinkToSearch();
 	}
 
@@ -140,8 +140,9 @@ public class TeamController extends BaseController {
         view.buildTable(table);
     }
 	
-	private void buildSearchResultsRoster(Team t, int year, List<Player> lop) {
-			
+	private void buildSearchResultsRoster(List<TeamSeasonPlayer> lop) {
+		Team t = lop.get(0).getTeam();
+		Integer year = lop.get(0).getYear();
 		String[][] table = new String[2][4];
         table[0][0] = "Name";
         table[0][1] = "League";
@@ -159,7 +160,7 @@ public class TeamController extends BaseController {
         players[0][2] = "Salary";
         
         for (int i = 0; i < lop.size(); i++) {
-        	Player p = lop.get(i);
+        	Player p = lop.get(i).getPlayer();
         	String name = p.getName();
         	String pid = p.getId().toString();
         	players[i + 1][0] = view.encodeLink(new String[]{"id"}, new String[]{pid}, name, ACT_DETAIL, SSP_PLAYER);

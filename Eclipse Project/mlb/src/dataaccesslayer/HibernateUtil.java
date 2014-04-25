@@ -148,16 +148,17 @@ public class HibernateUtil {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static List<Player> retrieveRoster(Team t, String yid) {
-		List<Player> list = null;
+	public static List<TeamSeasonPlayer> retrieveRoster(Team t, String yid) {
+		List<TeamSeasonPlayer> list = null;
+		Integer year = Integer.valueOf(yid);
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = session.getTransaction();
 		try {
 			tx.begin();
 			org.hibernate.Query query;
-			query = session.createQuery("select id.player from bo.TeamSeasonPlayer where id.team = :team and year = :yid");
+			query = session.createQuery("from bo.TeamSeasonPlayer where id.team = :team and year = :yid");
 		    query.setParameter("team", t);
-		    query.setParameter("yid", yid);
+		    query.setParameter("yid", year);
 		    list = query.list();
 			tx.commit();
 		} catch (Exception e) {
@@ -183,7 +184,7 @@ public class HibernateUtil {
 //				e.printStackTrace();
 //			}
 //		}
-		return null;
+		return list;
 	}
 	
 	
