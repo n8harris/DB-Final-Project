@@ -10,6 +10,7 @@ import org.hibernate.cfg.Configuration;
 
 import bo.Player;
 import bo.Team;
+import bo.TeamSeason;
 import bo.TeamSeasonPlayer;
 
 public class HibernateUtil {
