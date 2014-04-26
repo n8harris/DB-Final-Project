@@ -22,8 +22,7 @@ public class TeamView extends BaseView {
         body.append("<div class='row'>\r\n");
         body.append("<div class='five columns alpha'>\r\n");
         body.append("<div>\r\n");
-	    body.append("<label for='player'>Team Name</label>\r\n");
-	    body.append("<input type='text' name='name' />\r\n");
+	    body.append("<input type='text' name='name' placeholder='Team Name'/>\r\n");
 	    body.append("</div>\r\n");
 		body.append("</div>\r\n");
 		body.append("<div class='five columns alpha'>\r\n");
