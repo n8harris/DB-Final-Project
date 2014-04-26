@@ -112,6 +112,27 @@ public class HibernateUtil {
 		return list;	
 	}
 	
+	@SuppressWarnings("unchecked")
+	public static List<TeamSeasonPlayer> retrieveTeamsByPlayer(String playerid){
+		List<TeamSeasonPlayer> list = null;
+		Integer pid = Integer.valueOf(playerid);
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction tx = session.getTransaction();
+		try{
+			tx.begin();
+			org.hibernate.Query query;
+			query = session.createQuery("from bo.TeamSeasonPlayer where id.player.playerId = :pid");
+			
+			query.setParameter("pid", pid);
+			list = query.list();
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+		}
+		return list;	
+	}
+	
 	public static Team retrieveTeamById(Integer id) {
         Team t = null;
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();

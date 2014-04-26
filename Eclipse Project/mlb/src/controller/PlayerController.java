@@ -9,6 +9,7 @@ import view.PlayerView;
 import bo.Player;
 import bo.PlayerCareerStats;
 import bo.PlayerSeason;
+import bo.TeamSeasonPlayer;
 import dataaccesslayer.HibernateUtil;
 
 public class PlayerController extends BaseController {
@@ -62,6 +63,9 @@ public class PlayerController extends BaseController {
 			System.out.println("Player not found in processDetails by id: " + id);
 			return;
 		}
+        
+        List<TeamSeasonPlayer> Teams = retrieveTeamsByPlayer(String playerid);
+        
         buildSearchResultsTablePlayerDetail(p);
         view.buildLinkToSearch();
     }
