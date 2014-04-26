@@ -43,7 +43,7 @@ public abstract class BaseView {
         sb.append("<div class='section'>\r\n");
         sb.append("<h1>Search</h1>\r\n");			
         sb.append("</div></div>\r\n");				
-        sb.append("<div class='ten columns'>\r\n");			
+        sb.append("<div class='sixteen columns'>\r\n");			
         sb.append("<div class='section remove-top remove-bottom'>\r\n");
         sb.append(body);
         sb.append("<footer role='contentinfo' class='sixteen columns'>\r\n");
