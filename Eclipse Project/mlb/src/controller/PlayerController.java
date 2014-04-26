@@ -64,9 +64,9 @@ public class PlayerController extends BaseController {
 			return;
 		}
         
-        List<TeamSeasonPlayer> Teams = retrieveTeamsByPlayer(String playerid);
+       List<TeamSeasonPlayer> tsp = HibernateUtil.retrieveTeamsByPlayer(id);
         
-        buildSearchResultsTablePlayerDetail(p);
+        buildSearchResultsTablePlayerDetail(p, tsp);
         view.buildLinkToSearch();
     }
 
@@ -101,7 +101,7 @@ public class PlayerController extends BaseController {
         view.buildTable(table);
     }
     
-    private void buildSearchResultsTablePlayerDetail(Player p) {
+    private void buildSearchResultsTablePlayerDetail(Player p, List<TeamSeasonPlayer> tsp) {
     	Set<PlayerSeason> seasons = p.getSeasons();
     	Set<String> positions = p.getPositions();
     	List<PlayerSeason> list = new ArrayList<PlayerSeason>(seasons);
