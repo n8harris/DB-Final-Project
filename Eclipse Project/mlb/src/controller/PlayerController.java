@@ -64,7 +64,7 @@ public class PlayerController extends BaseController {
 			return;
 		}
         
-       List<TeamSeasonPlayer> tsp = HibernateUtil.retrieveTeamsByPlayer(id);
+        List<TeamSeasonPlayer> tsp = HibernateUtil.retrieveTeamsByPlayer(id);
         
         buildSearchResultsTablePlayerDetail(p, tsp);
         view.buildLinkToSearch();
@@ -145,14 +145,24 @@ public class PlayerController extends BaseController {
         seasonTable[0][5] = "At Bats";
         seasonTable[0][6] = "Batting Average";
         seasonTable[0][7] = "Home Runs";
-        int i = 0;
-        for (PlayerSeason ps: list) {
-        	i++;
+        //int i = 0;
+        //for (PlayerSeason ps: list) {
+        for (int i=0;i<list.size();i++) {
+        	//i++;
+        	String teamString = null;
+        	String tid = null;
+        	if (tsp.size() > i) {
+        		teamString = tsp.get(i).getTeam().getName();
+        		tid = tsp.get(i).getTeam().getId().toString();
+        	}
+        	
+        	PlayerSeason ps = list.get(i);
         	seasonTable[i][0] = ps.getYear().toString();
         	seasonTable[i][1] = ps.getGamesPlayed().toString();
         	seasonTable[i][2] = DOLLAR_FORMAT.format(ps.getSalary());
-        	String teamsString="";
-        	seasonTable[i][3] = teamsString;
+        	if(tid != null) {
+        		seasonTable[i][3] = view.encodeLink(new String[]{"id"}, new String[]{tid}, teamString, ACT_DETAIL, SSP_TEAM);
+        	}
         	seasonTable[i][4] = ps.getBattingStats().getHits().toString();
         	seasonTable[i][5] = ps.getBattingStats().getAtBats().toString();
         	seasonTable[i][6] = DOUBLE_FORMAT.format(ps.getBattingAverage());

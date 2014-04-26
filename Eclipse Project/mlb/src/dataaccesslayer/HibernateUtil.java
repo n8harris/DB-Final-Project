@@ -121,7 +121,7 @@ public class HibernateUtil {
 		try{
 			tx.begin();
 			org.hibernate.Query query;
-			query = session.createQuery("from bo.TeamSeasonPlayer where id.player.playerId = :pid");
+			query = session.createQuery("from bo.TeamSeasonPlayer where id.player.playerId = :pid order by year asc");
 			
 			query.setParameter("pid", pid);
 			list = query.list();
