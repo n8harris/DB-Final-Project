@@ -514,7 +514,7 @@ public class Convert {
 					"playerID, " +
 					"teamID, " +
 					"yearID " + 
-					"from Appearances " +
+					"from batting " +
 					"where teamID = ? " + 
 					"and yearID = ? ;");
 			ps.setString(1, tid);

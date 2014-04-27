@@ -209,11 +209,11 @@ public class TeamSeasonPlayer implements Serializable {
 		public int compare(TeamSeasonPlayer tsp1, TeamSeasonPlayer tsp2) {
 			TeamSeasonPlayerId id1 = tsp1.getId();
 			TeamSeasonPlayerId id2 = tsp2.getId();
-			if(id1.equals(id2)) {
+			if(id1.equals(id2) && tsp1.getYear()== tsp2.getYear()) {
 				return 0;
 			}
 			else {
-				return 1;
+				return -1;
 			}
 			
 		}
