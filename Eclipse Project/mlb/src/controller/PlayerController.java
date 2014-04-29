@@ -151,7 +151,7 @@ public class PlayerController extends BaseController {
         	//i++;
         	String teamString = null;
         	String tid = null;
-        	if (tsp.size() > i) {
+        	if (tsp.size() > i-1) {
         		teamString = tsp.get(i-1).getTeam().getName();
         		tid = tsp.get(i-1).getTeam().getId().toString();
         	}
