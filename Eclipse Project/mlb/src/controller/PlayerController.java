@@ -147,16 +147,16 @@ public class PlayerController extends BaseController {
         seasonTable[0][7] = "Home Runs";
         //int i = 0;
         //for (PlayerSeason ps: list) {
-        for (int i=0;i<list.size();i++) {
+        for (int i=1;i<=list.size();i++) {
         	//i++;
         	String teamString = null;
         	String tid = null;
         	if (tsp.size() > i) {
-        		teamString = tsp.get(i).getTeam().getName();
-        		tid = tsp.get(i).getTeam().getId().toString();
+        		teamString = tsp.get(i-1).getTeam().getName();
+        		tid = tsp.get(i-1).getTeam().getId().toString();
         	}
         	
-        	PlayerSeason ps = list.get(i);
+        	PlayerSeason ps = list.get(i-1);
         	seasonTable[i][0] = ps.getYear().toString();
         	seasonTable[i][1] = ps.getGamesPlayed().toString();
         	seasonTable[i][2] = DOLLAR_FORMAT.format(ps.getSalary());
