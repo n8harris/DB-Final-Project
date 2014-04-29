@@ -145,28 +145,29 @@ public class PlayerController extends BaseController {
         seasonTable[0][5] = "At Bats";
         seasonTable[0][6] = "Batting Average";
         seasonTable[0][7] = "Home Runs";
+        String teamString = null;
+    	String tid = null;
         //int i = 0;
         //for (PlayerSeason ps: list) {
         for (int i=0;i<list.size();i++) {
         	//i++;
-        	String teamString = null;
-        	String tid = null;
+        	
         	if (tsp.size() > i) {
         		teamString = tsp.get(i).getTeam().getName();
         		tid = tsp.get(i).getTeam().getId().toString();
         	}
         	
         	PlayerSeason ps = list.get(i);
-        	seasonTable[i][0] = ps.getYear().toString();
-        	seasonTable[i][1] = ps.getGamesPlayed().toString();
-        	seasonTable[i][2] = DOLLAR_FORMAT.format(ps.getSalary());
+        	seasonTable[i+1][0] = ps.getYear().toString();
+        	seasonTable[i+1][1] = ps.getGamesPlayed().toString();
+        	seasonTable[i+1][2] = DOLLAR_FORMAT.format(ps.getSalary());
         	if(tid != null) {
-        		seasonTable[i][3] = view.encodeLink(new String[]{"id"}, new String[]{tid}, teamString, ACT_DETAIL, SSP_TEAM);
+        		seasonTable[i+1][3] = view.encodeLink(new String[]{"id"}, new String[]{tid}, teamString, ACT_DETAIL, SSP_TEAM);
         	}
-        	seasonTable[i][4] = ps.getBattingStats().getHits().toString();
-        	seasonTable[i][5] = ps.getBattingStats().getAtBats().toString();
-        	seasonTable[i][6] = DOUBLE_FORMAT.format(ps.getBattingAverage());
-        	seasonTable[i][7] = ps.getBattingStats().getHomeRuns().toString();
+        	seasonTable[i+1][4] = ps.getBattingStats().getHits().toString();
+        	seasonTable[i+1][5] = ps.getBattingStats().getAtBats().toString();
+        	seasonTable[i+1][6] = DOUBLE_FORMAT.format(ps.getBattingAverage());
+        	seasonTable[i+1][7] = ps.getBattingStats().getHomeRuns().toString();
         }
         view.buildTable(seasonTable);
     }
