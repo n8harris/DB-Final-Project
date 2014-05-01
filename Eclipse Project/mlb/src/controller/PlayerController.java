@@ -64,7 +64,7 @@ public class PlayerController extends BaseController {
 			return;
 		}
         
-        List<TeamSeasonPlayer> tsp = HibernateUtil.retrieveTeamsByPlayer(id);
+        List<TeamSeasonPlayer> tsp = HibernateUtil.retrieveTeamsByPlayer(p);
         
         buildSearchResultsTablePlayerDetail(p, tsp);
         view.buildLinkToSearch();

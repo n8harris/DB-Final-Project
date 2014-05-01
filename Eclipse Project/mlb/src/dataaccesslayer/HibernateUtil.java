@@ -113,17 +113,17 @@ public class HibernateUtil {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static List<TeamSeasonPlayer> retrieveTeamsByPlayer(String playerid){
+	public static List<TeamSeasonPlayer> retrieveTeamsByPlayer(Player p){
 		List<TeamSeasonPlayer> list = null;
-		Integer pid = Integer.valueOf(playerid);
+		//Integer pid = Integer.valueOf(playerid);
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = session.getTransaction();
 		try{
 			tx.begin();
 			org.hibernate.Query query;
-			query = session.createQuery("from bo.TeamSeasonPlayer where id.player.playerId = :pid order by year asc");
+			query = session.createQuery("from bo.TeamSeasonPlayer where id.player = :pid order by year asc");
 			
-			query.setParameter("pid", pid);
+			query.setParameter("pid", p);
 			list = query.list();
 			tx.commit();
 		} catch (Exception e) {

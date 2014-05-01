@@ -5,6 +5,9 @@ import java.util.Comparator;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import bo.TeamSeason.TeamSeasonId;
 
 @SuppressWarnings("serial")
@@ -92,6 +95,7 @@ public class TeamSeasonPlayer implements Serializable {
 	}
 	
 	@Column
+	@Fetch(FetchMode.JOIN)
 	Integer year;
 	/*
 	 @JoinColumn(name="playerId")
