@@ -248,6 +248,22 @@ public class HibernateUtil {
 		
 	}
 	
+	public static boolean updateTeam(Team t){
+		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		Transaction tx = session.getTransaction();
+		try {
+			tx.begin();
+			session.update(t);
+			tx.commit();
+		} catch (Exception e){
+			tx.rollback();
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+		
+	}
+	
 	public static boolean persistTeamSeasonPlayer(TeamSeasonPlayer tsp) {
 		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = session.getTransaction();
