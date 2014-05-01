@@ -28,6 +28,7 @@ public class Convert {
 	static Connection conn;
 	static final String MYSQL_CONN_URL = "jdbc:mysql://192.168.56.1:3306/mlb?user=root&password=password"; 
 	static HashMap<String, Player> playerids = new HashMap<String, Player>();
+	static HashMap<String, Team> teamids = new HashMap<String, Team>();
 	
 	public static void main(String[] args) {
 		try {
@@ -394,7 +395,7 @@ public class Convert {
 	public static void convertTeam() {
 		try {
 			PreparedStatement ps = conn.prepareStatement("select " + 
-						"distinct teamID, " + 
+						"teamID, " + 
 						"name, " + 
 						"lgID, " +
 						"yearID " +
@@ -402,7 +403,6 @@ public class Convert {
 		
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-<<<<<<< HEAD
 				String oldId = rs.getString("teamID").trim();
 				
 				if(!teamids.containsKey(oldId)) {
@@ -437,20 +437,6 @@ public class Convert {
 					thisTeam.setLeague(rs.getString("lgID").trim());
 					HibernateUtil.updateTeam(thisTeam);
 				}
-=======
-				Team t = new Team();
-				String teamName = rs.getString("name").trim();
-				t.setName(teamName);
-				String teamId = rs.getString("teamId").trim();
-				if (teamName == null	|| teamName.isEmpty() || 
-						teamId == null || teamId.isEmpty()) continue;
-				String league = rs.getString("lgID").trim();
-				//t.setId(teamId);
-				t.setLeague(league);
-				updateYears(t, teamId);
-				addTeamSeasons(t, teamId);
-				HibernateUtil.persistTeam(t);
->>>>>>> parent of afa0c4f... convert.java
 			
 			}
 			// For year founded, just select the first recorded year?
