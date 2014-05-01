@@ -397,12 +397,14 @@ public class Convert {
 			PreparedStatement ps = conn.prepareStatement("select " + 
 						"teamID, " + 
 						"name, " + 
-						"lgID " +
-						"from teams");
+						"lgID, " +
+						"yearID " +
+						"from teams order by yearID asc");
 		
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
 				String oldId = rs.getString("teamID").trim();
+				
 				if(!teamids.containsKey(oldId)) {
 					String teamName = rs.getString("name").trim();
 					Team t = new Team();					
@@ -429,7 +431,11 @@ public class Convert {
 				else {
 					Team thisTeam = teamids.get(oldId);
 					thisTeam.setName(rs.getString("name").trim());
-					thisTeam.setLeague(rs.getString("lgID").trim());					
+//					if(oldId.equals("CL1")) {
+//						thisTeam.setName("Cleveland Cavs");
+//					}
+					thisTeam.setLeague(rs.getString("lgID").trim());
+					HibernateUtil.updateTeam(thisTeam);
 				}
 			
 			}
