@@ -117,9 +117,9 @@ public class Convert {
 				if (lastGame!=null) p.setLastGame(lastGame);
 				p.setCollege(rs.getString("college"));
 							
-				//addPositions(p, pid);TODO
+				addPositions(p, pid);
 				// players bio collected, now go after stats
-				//addSeasons(p, pid);TODO
+				addSeasons(p, pid);
 				// we can now persist player, and the seasons and stats will cascade
 				HibernateUtil.persistPlayer(p);
 				
