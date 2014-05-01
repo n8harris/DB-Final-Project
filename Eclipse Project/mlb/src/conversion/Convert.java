@@ -4,10 +4,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import bo.BattingStats;
@@ -394,11 +396,48 @@ public class Convert {
 			PreparedStatement ps = conn.prepareStatement("select " + 
 						"distinct teamID, " + 
 						"name, " + 
-						"lgID " +
-						"from teams");
+						"lgID, " +
+						"yearID " +
+						"from teams order by yearID asc");
 		
 			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
+<<<<<<< HEAD
+				String oldId = rs.getString("teamID").trim();
+				
+				if(!teamids.containsKey(oldId)) {
+					String teamName = rs.getString("name").trim();
+					Team t = new Team();					
+					t.setName(teamName);
+					String teamId = rs.getString("teamId").trim();
+					if (teamName == null	|| teamName.isEmpty() || 
+							teamId == null || teamId.isEmpty()) continue;
+					String league = rs.getString("lgID").trim();
+					t.setLeague(league);
+					updateYears(t, teamId);
+					
+
+									
+					List<teamData> data = addTeamSeasons(t, teamId);
+					HibernateUtil.persistTeam(t);
+					for(teamData teamD : data) {
+						addTeamSeasonPlayer(teamD.getT(), teamD.getTid(), teamD.getYearID(), teamD.gettS());
+					}
+					
+					
+					teamids.put(oldId, t);
+					
+				}
+				else {
+					Team thisTeam = teamids.get(oldId);
+					thisTeam.setName(rs.getString("name").trim());
+//					if(oldId.equals("CL1")) {
+//						thisTeam.setName("Cleveland Cavs");
+//					}
+					thisTeam.setLeague(rs.getString("lgID").trim());
+					HibernateUtil.updateTeam(thisTeam);
+				}
+=======
 				Team t = new Team();
 				String teamName = rs.getString("name").trim();
 				t.setName(teamName);
@@ -411,6 +450,7 @@ public class Convert {
 				updateYears(t, teamId);
 				addTeamSeasons(t, teamId);
 				HibernateUtil.persistTeam(t);
+>>>>>>> parent of afa0c4f... convert.java
 			
 			}
 			// For year founded, just select the first recorded year?
@@ -458,7 +498,7 @@ public class Convert {
 		}
 	}
 	
-	public static void addTeamSeasons(Team t, String tid) {
+	public static List<teamData> addTeamSeasons(Team t, String tid) {
 		try {
 			PreparedStatement ps = conn.prepareStatement("select " + 
 					"teamID, " +
@@ -475,7 +515,7 @@ public class Convert {
 			//year, gamesPlayed, wins, losses, team_rank, totalAttendance, 
 			ps.setString(1, tid);
 			ResultSet rs = ps.executeQuery();
-			
+			List<teamData> teamD = new ArrayList<teamData>();
 			while (rs.next()) {
 				// For each year of this team's existence, make an entry in TeamSeason
 				Integer gamesPlayed = Integer.parseInt(rs.getString("G").trim());
@@ -495,13 +535,17 @@ public class Convert {
 				tS.setTotalAttendance(attendance);
 				tS.setWins(wins);
 				//System.out.println(tS);
-				addTeamSeasonPlayer(t, tid, yearID, tS);
+				teamData tD = new teamData(t, tid, yearID, tS);
+				teamD.add(tD);
+				
 
 			}
 			rs.close();
 			ps.close();
+			return teamD;
 		} catch (Exception e) {
 			e.printStackTrace();
+			return null;
 		}
 
 	}
@@ -530,19 +574,61 @@ public class Convert {
 				
 				if (thisPlayer == null || thisPlayer.getId() == null) continue;
 				
-				tsp = t.getSeasonPlayer(thisPlayer);
-				if (tsp==null) {
-					tsp = new TeamSeasonPlayer(thisPlayer, t, yearID);
-					t.addSeasonPlayer(tsp);
-				}
+				//tsp = t.getSeasonPlayer(thisPlayer);
+				//if (tsp==null) {
+					
+				tsp = new TeamSeasonPlayer(thisPlayer, t, yearID);
+					//t.addSeasonPlayer(tsp);
+				//}
 				
 				
-				//HibernateUtil.persistTeamSeasonPlayer(tsp);
+				HibernateUtil.persistTeamSeasonPlayer(tsp);
 			}
 			rs.close();
 			ps.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+		
+	}
+	
+	public static class teamData {
+		Team t;
+		String tid;
+		Integer yearID;
+		TeamSeason tS;
+		
+		public teamData(Team t, String tid,	Integer yearID, TeamSeason tS) {
+			this.t = t;
+			this.tid = tid;
+			this.yearID = yearID;
+			this.tS = tS;
+			
+		}
+		
+		public Team getT() {
+			return t;
+		}
+		public void setT(Team t) {
+			this.t = t;
+		}
+		public String getTid() {
+			return tid;
+		}
+		public void setTid(String tid) {
+			this.tid = tid;
+		}
+		public Integer getYearID() {
+			return yearID;
+		}
+		public void setYearID(Integer yearID) {
+			this.yearID = yearID;
+		}
+		public TeamSeason gettS() {
+			return tS;
+		}
+		public void settS(TeamSeason tS) {
+			this.tS = tS;
 		}
 		
 	}
