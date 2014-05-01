@@ -42,9 +42,9 @@ public class Team implements Serializable{
 	@Fetch(FetchMode.SELECT)
 	Set<TeamSeason> seasons = new HashSet<TeamSeason>();
 	
-	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="id.player")
-	@Fetch(FetchMode.SELECT)
-	Set<TeamSeasonPlayer> seasonPlayer = new HashSet<TeamSeasonPlayer>();
+//	@OneToMany(fetch = FetchType.LAZY, cascade=CascadeType.ALL, mappedBy="id.player")
+//	@Fetch(FetchMode.SELECT)
+//	Set<TeamSeasonPlayer> seasonPlayer = new HashSet<TeamSeasonPlayer>();
 	
 	
 	//public Team() {System.out.println("created Team");}
@@ -73,26 +73,26 @@ public class Team implements Serializable{
 		this.seasons = seasons;
 	}
 	
-	public void addSeasonPlayer(TeamSeasonPlayer sP){
-		this.seasonPlayer.add(sP);
-	}
+//	public void addSeasonPlayer(TeamSeasonPlayer sP){
+//		this.seasonPlayer.add(sP);
+//	}
 	
-	public TeamSeasonPlayer getSeasonPlayer(Player p) {
-		if(p!=null){
-			for (TeamSeasonPlayer ts : seasonPlayer) {
-				if (ts.getPlayer().equals(p)) return ts;
-			}
-			return null;
-		}else
-			System.out.println("poop");
-		return null;
-		
-	}
+//	public TeamSeasonPlayer getSeasonPlayer(Player p) {
+//		if(p!=null){
+//			for (TeamSeasonPlayer ts : seasonPlayer) {
+//				if (ts.getPlayer().equals(p)) return ts;
+//			}
+//			return null;
+//		}else
+//			System.out.println("poop");
+//		return null;
+//		
+//	}
 	
-	public Set<TeamSeasonPlayer> getSeasonPlayer(){
-		return seasonPlayer;
-	}	
-	
+//	public Set<TeamSeasonPlayer> getSeasonPlayer(){
+//		return seasonPlayer;
+//	}	
+//	
 	public Integer getId() {
 		return teamId;
 	}
